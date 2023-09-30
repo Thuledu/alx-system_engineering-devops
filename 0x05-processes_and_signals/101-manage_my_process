@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Function to start manage_my_process
+start_process() {
+    ./manage_my_process.sh start
+}
+
+# Function to stop manage_my_process
+stop_process() {
+    ./manage_my_process.sh stop
+}
+
+# Function to restart manage_my_process
+restart_process() {
+    ./manage_my_process.sh restart
+}
+
+# Check the argument passed to the script
+case "$1" in
+    start)
+        start_process
+        ;;
+    stop)
+        stop_process
+        ;;
+    restart)
+        restart_process
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0
