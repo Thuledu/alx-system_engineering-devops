@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # This script displays different numbers and messages based on the loop iteration
+
 count=1
 while [ $count -le 20 ]
 do
