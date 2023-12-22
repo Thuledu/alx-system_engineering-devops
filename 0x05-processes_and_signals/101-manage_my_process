@@ -1,21 +1,36 @@
 #!/usr/bin/env bash
+# 101-manage_my_process Bash script
 
-# Function to start manage_my_process
+pid_file="/var/run/my_process.pid"
+
 start_process() {
-    ./manage_my_process.sh start
+    if [ -f "$pid_file" ]; then
+        echo "manage_my_process is already running with PID $(cat $pid_file)"
+    else
+        /bin/bash /path/to/manage_my_process start
+        echo "manage_my_process started"
+    fi
 }
 
-# Function to stop manage_my_process
 stop_process() {
-    ./manage_my_process.sh stop
+    if [ -f "$pid_file" ]; then
+        pid=$(cat "$pid_file")
+        /bin/bash /path/to/manage_my_process stop
+        echo "manage_my_process stopped"
+    else
+        echo "manage_my_process is not running"
+    fi
 }
 
-# Function to restart manage_my_process
 restart_process() {
-    ./manage_my_process.sh restart
+    if [ -f "$pid_file" ]; then
+        pid=$(cat "$pid_file")
+        /bin/bash /path/to/manage_my_process stop
+    fi
+    /bin/bash /path/to/manage_my_process start
+    echo "manage_my_process restarted"
 }
 
-# Check the argument passed to the script
 case "$1" in
     start)
         start_process
@@ -29,6 +44,5 @@ case "$1" in
     *)
         echo "Usage: $0 {start|stop|restart}"
         exit 1
+        ;;
 esac
-
-exit 0
