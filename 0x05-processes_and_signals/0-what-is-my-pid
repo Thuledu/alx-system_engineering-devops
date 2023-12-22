@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-echo "$$"
+# This script displays its own PID
+
+echo $$ # $$ is a special variable that holds the PID of the current process
