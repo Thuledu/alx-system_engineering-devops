@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
-# Create a regular expression
-regex = /School/
-
 # Accept the argument from the command line
 argument = ARGV[0]
 
-# Pass the argument to the regular expression matching method
-match_result = argument.match(regex)
+# Create a regular expression to match the word "School"
+regex = /School/
 
-# Output the result
-puts match_result
+# Check if the argument matches the regular expression
+if argument.match?(regex)
+  puts argument
+else
+  puts ""
+end
