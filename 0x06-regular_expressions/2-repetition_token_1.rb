@@ -6,4 +6,8 @@ argument = ARGV[0]
 regex = /School/
 
 # Check if the argument matches the regular expression and output the result
-puts argument =~ regex ? argument : ""
+if argument.match?(regex)
+  puts argument
+else
+  puts ""
+end
