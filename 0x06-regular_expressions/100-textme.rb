@@ -3,13 +3,15 @@
 File.open('log_file.txt', 'r') do |file|
   file.each_line do |line|
     if line.include?("Receive SMS") || line.include?("Sent SMS")
-      sender = line[/from:(\S+)/, 1]
-      receiver = line[/to:(\S+)/, 1]
-      sender = sender.gsub(/[^0-9a-z +]/i, '')  
-      receiver = receiver.gsub(/[^0-9a-z +]/i, '')  
-      flags = line[/flags:([\d:-]+)/, 1]
+      sender_match = line.match(/\[from:(.+?)\]/)
+      receiver_match = line.match(/\[to:(.+?)\]/)
+      flags_match = line.match(/\[flags:(.+?)\]/)
 
-      puts "#{sender},#{receiver},#{flags}"
+      sender = sender_match ? sender_match[1] : "Unknown"
+      receiver = receiver_match ? receiver_match[1] : "Unknown"
+      flags = flags_match ? flags_match[1] : "Unknown"
+
+      puts "#{sender.tr('[]', '')},#{receiver.tr('[]', '')},#{flags}"
     end
   end
 end
