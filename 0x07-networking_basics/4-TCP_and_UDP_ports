@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# This scricpt will display the listening ports along with the PID and the program name to which each socket belongs.
+netstat -tuln | grep 'LISTEN' | awk '{print $4}' | awk -F':' '{print $2}'
