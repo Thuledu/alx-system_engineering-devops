@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Install nginx
+apt-get update
+apt-get -y install nginx
+echo "Hello World!" > /var/www/html/index.html
+kill -HUP $(pgrep -f "nginx: master process")
+
+if pgrep -x "nginx" > /dev/null
+then
+    echo "Nginx installed and running successfully"
+else
+    echo "Nginx installation failed"
+fi
