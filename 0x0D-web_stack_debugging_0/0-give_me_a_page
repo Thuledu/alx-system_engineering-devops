@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Docker
+docker exec -it <container_id> bash -c "echo 'Hello Holberton' > /var/www/html/index.html"
+
