@@ -11,15 +11,16 @@ $hostname = $facts['hostname']
 $custom_header = "add_header X-Served-By ${hostname};"
 
 # Add custom header to Nginx configuration
-file_line { 'custom_header':
-  path  => '/etc/nginx/sites-available/default',
-  line  => $custom_header,
-  match => 'server_name _;',
+file { '/etc/nginx/server.headers':
+  ensure  => present,
+  content => "location / { ${custom_header} }",
+  notify  => Service['nginx'],
 }
 
 # Notify Nginx service to restart when the configuration changes
 service { 'nginx':
   ensure  => running,
   enable  => true,
-  require => File_line['custom_header'],
+  require => File['/etc/nginx/server.headers'],
 }
+
