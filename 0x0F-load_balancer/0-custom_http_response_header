@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Configure web-02 to be identical to web-01.
+
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null
+then
+    sudo apt-get -y update
+    sudo apt-get -y install nginx
+fi
+
+HOST_NAME=$(hostname)
+NGINX_CONF="/etc/nginx/sites-available/default"
+CUSTOM_HEADER="add_header X-Served-By $HOST_NAME;"
+
+# Function to add custom header if not already present
+add_custom_header() {
+    if ! grep -q "X-Served-By" "$NGINX_CONF"; then
+        sed -i "/server_name _;/a \\\t$CUSTOM_HEADER" "$NGINX_CONF"
+    fi
+}
+
+# Create a basic index.html page
+echo "Hello, World!" > /var/www/html/index.html
+
+# Add redirection to another page in the Nginx configuration
+REDIRECT_STRING="location /redirect_me {\n\treturn 301 https://www.youtube.com/watch?v=3MbaGJN2ioQ;\n}"
+add_redirect() {
+    if ! grep -q "redirect_me" "$NGINX_CONF"; then
+        sed -i "/server_name _;/a \\\t$REDIRECT_STRING" "$NGINX_CONF"
+    fi
+}
+
+# Add a custom 404 error page to the Nginx configuration
+ERROR_PAGE="error_page 404 /custom_404.html;"
+add_custom_error_page() {
+    if ! grep -q "error_page 404" "$NGINX_CONF"; then
+        echo "Ceci n'est pas une page" > /var/www/html/custom_404.html
+        sed -i "/server_name _;/a \\\t$ERROR_PAGE" "$NGINX_CONF"
+    fi
+}
+
+# Execute functions to add custom configurations
+add_custom_header
+add_redirect
+add_custom_error_page
+
+# Restart Nginx to apply the changes
+systemctl restart nginx
