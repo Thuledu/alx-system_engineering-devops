@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Configure your domain zone 
+# Function to display information about a subdomain
+display_info() {
+  local subdomain=$1
+  local domain=$2
+  local record_type=$(dig $subdomain.$domain | awk '/^;; ANSWER SECTION:$/ { getline; print $4 }')
+  local destination=$(dig $subdomain.$domain | awk '/^;; ANSWER SECTION:$/ { getline; print $5 }')
+  echo "The subdomain $subdomain is a $record_type record and points to $destination"
+}
+
+# Main script logic
+if [ $# -eq 1 ]; then
+  # Display information for default subdomains
+  display_info www $1
+  display_info lb-01 $1
+  display_info web-01 $1
+  display_info web-02 $1
+elif [ $# -eq 2 ]; then
+  # Display information for specified subdomain
+  display_info $2 $1
+else
+  echo "Invalid number of arguments. Usage: $0 domain [subdomain]"
+fi
+
